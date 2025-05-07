@@ -17,7 +17,7 @@ import zipfile
 
 import obspy
 import numpy as np
-from scipy.integrate import simps
+from scipy.integrate import simpson
 import pytest
 from .tornado_testing_fixtures import *  # NOQA
 from .tornado_testing_fixtures import _assemble_url
@@ -282,7 +282,7 @@ def test_greens_function_retrieval(all_greens_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # miniseed
@@ -319,7 +319,7 @@ def test_greens_function_retrieval(all_greens_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # One with a label.
@@ -371,7 +371,7 @@ def test_greens_function_retrieval(all_greens_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # One simulating a crash in the underlying function.
@@ -1938,7 +1938,7 @@ def test_seismograms_retrieval(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     if client.is_reciprocal:
@@ -1989,7 +1989,7 @@ def test_seismograms_retrieval(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # From strike, dip, rake
@@ -2029,7 +2029,7 @@ def test_seismograms_retrieval(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Moment tensor source with a couple more parameters.
@@ -2079,7 +2079,7 @@ def test_seismograms_retrieval(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Force source only works for displ_only databases.
@@ -2124,7 +2124,7 @@ def test_seismograms_retrieval(all_clients):
             # Relative tolerance not particularly useful when testing super
             # small values.
             np.testing.assert_allclose(
-                tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+                tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
             )
 
         params["sourcedepthinmeters"] = "5.0"
@@ -2173,7 +2173,7 @@ def test_seismograms_retrieval(all_clients):
             # Relative tolerance not particularly useful when testing super
             # small values.
             np.testing.assert_allclose(
-                tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+                tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
             )
 
     source = instaseis.Source(
@@ -2217,7 +2217,7 @@ def test_seismograms_retrieval(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     params = copy.deepcopy(basic_parameters)
@@ -2241,7 +2241,7 @@ def test_seismograms_retrieval(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     params = copy.deepcopy(basic_parameters)
@@ -2265,7 +2265,7 @@ def test_seismograms_retrieval(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     params = copy.deepcopy(basic_parameters)
@@ -2291,7 +2291,7 @@ def test_seismograms_retrieval(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     params = copy.deepcopy(basic_parameters)
@@ -2322,7 +2322,7 @@ def test_seismograms_retrieval(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
 
@@ -2945,7 +2945,7 @@ def test_multiple_seismograms_retrieval_no_format_given(
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Strike/dip/rake source
@@ -3014,7 +3014,7 @@ def test_multiple_seismograms_retrieval_no_format_given(
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Force source only works for displ_only databases.
@@ -3088,7 +3088,7 @@ def test_multiple_seismograms_retrieval_no_format_given(
             # Relative tolerance not particularly useful when testing super
             # small values.
             np.testing.assert_allclose(
-                tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+                tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
             )
 
 
@@ -3184,7 +3184,7 @@ def test_multiple_seismograms_retrieval_no_format_given_single_station(
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # From this point on, only three component databases.
@@ -3255,7 +3255,7 @@ def test_multiple_seismograms_retrieval_no_format_given_single_station(
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Force source only works for displ_only databases.
@@ -3322,7 +3322,7 @@ def test_multiple_seismograms_retrieval_no_format_given_single_station(
             # Relative tolerance not particularly useful when testing super
             # small values.
             np.testing.assert_allclose(
-                tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+                tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
             )
 
 
@@ -3427,7 +3427,7 @@ def test_multiple_seismograms_retrieval_mseed_format(
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Execute the rest only for databases that have vertical and horizontal
@@ -3504,7 +3504,7 @@ def test_multiple_seismograms_retrieval_mseed_format(
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Force source only works for displ_only databases.
@@ -3577,7 +3577,7 @@ def test_multiple_seismograms_retrieval_mseed_format(
             # Relative tolerance not particularly useful when testing super
             # small values.
             np.testing.assert_allclose(
-                tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+                tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
             )
 
 
@@ -3685,7 +3685,7 @@ def test_multiple_seismograms_retrieval_saczip_format(
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # From here on only 3C databases
@@ -3768,7 +3768,7 @@ def test_multiple_seismograms_retrieval_saczip_format(
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Force source only works for displ_only databases.
@@ -3847,7 +3847,7 @@ def test_multiple_seismograms_retrieval_saczip_format(
             # Relative tolerance not particularly useful when testing super
             # small values.
             np.testing.assert_allclose(
-                tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+                tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
             )
 
 
@@ -5921,7 +5921,7 @@ def test_scale_parameter(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # No change if a scale of 1 is set.
@@ -5943,7 +5943,7 @@ def test_scale_parameter(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # No change if a scale of 3.5 is set.
@@ -5967,7 +5967,7 @@ def test_scale_parameter(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Negative scale of -2.5.
@@ -5991,7 +5991,7 @@ def test_scale_parameter(all_clients):
         # Relative tolerance not particularly useful when testing super
         # small values.
         np.testing.assert_allclose(
-            tr_server.data, tr_db.data, atol=1e-10 * tr_server.data.ptp()
+            tr_server.data, tr_db.data, atol=1e-10 * np.ptp(tr_server.data)
         )
 
     # Scale of 0 should raise.
@@ -6237,13 +6237,13 @@ def test_gaussian_source_time_function_calculation():
     """
     # Test the integral. More accurate for smaller deltas.
     _, y = util.get_gaussian_source_time_function(4, 1.2)
-    assert np.isclose(simps(y, dx=1.2), 1.0, rtol=1e-2)
+    assert np.isclose(simpson(y, dx=1.2), 1.0, rtol=1e-2)
     _, y = util.get_gaussian_source_time_function(4, 1.0)
-    assert np.isclose(simps(y, dx=1.0), 1.0, rtol=1e-3)
+    assert np.isclose(simpson(y, dx=1.0), 1.0, rtol=1e-3)
     _, y = util.get_gaussian_source_time_function(4, 0.1)
-    assert np.isclose(simps(y, dx=0.1), 1.0, rtol=1e-6)
+    assert np.isclose(simpson(y, dx=0.1), 1.0, rtol=1e-6)
     _, y = util.get_gaussian_source_time_function(4, 0.01)
-    assert np.isclose(simps(y, dx=0.01), 1.0, rtol=1e-7)
+    assert np.isclose(simpson(y, dx=0.01), 1.0, rtol=1e-7)
 
     # Test the offset. Always has to be larger then the chosen source width
     # and at a sample.

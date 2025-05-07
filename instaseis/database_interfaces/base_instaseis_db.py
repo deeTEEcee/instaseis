@@ -20,7 +20,7 @@ import numpy as np
 from obspy.core import AttribDict, Stream, Trace, UTCDateTime
 from obspy.geodetics import locations2degrees
 from obspy.signal.interpolation import lanczos_interpolation
-from scipy.integrate import cumtrapz
+from scipy.integrate import cumulative_trapezoid
 import scipy.signal
 
 from ..source import Source, ForceSource, Receiver, FiniteSource
@@ -58,7 +58,7 @@ def _diff_and_integrate(n_derivative, data, comp, dt_out):
     # Cannot happen currently - maybe with other source time functions?
     for _ in np.arange(-n_derivative):  # pragma: no cover
         # adding a zero at the beginning to avoid phase shift
-        data[comp] = cumtrapz(data[comp], dx=dt_out, initial=0.0)
+        data[comp] = cumulative_trapezoid(data[comp], dx=dt_out, initial=0.0)
 
 
 class BaseInstaseisDB(metaclass=ABCMeta):
@@ -366,7 +366,7 @@ class BaseInstaseisDB(metaclass=ABCMeta):
                 # The first sample is guaranteed to be zero in any case.
                 tlen = max(int(math.ceil(0.05 * len(data[comp]))), 5)
                 taper = np.ones_like(data[comp])
-                taper[-tlen:] = scipy.signal.hann(tlen * 2)[tlen:]
+                taper[-tlen:] = scipy.signal.windows.hann(tlen * 2)[tlen:]
                 dataf = np.fft.rfft(taper * data[comp], n=self.info.nfft)
 
                 # Ensure numerical stability by not dividing with zero.

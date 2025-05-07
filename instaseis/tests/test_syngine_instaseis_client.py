@@ -65,7 +65,7 @@ def _compare_streams(s_db, l_db, kwargs):
         # orders of magnitude should be more than accurate enough.
 
         np.testing.assert_allclose(
-            s_tr.data, l_tr.data, atol=1e-6 * s_tr.data.ptp()
+            s_tr.data, l_tr.data, atol=1e-6 * np.ptp(s_tr.data)
         )
 
 

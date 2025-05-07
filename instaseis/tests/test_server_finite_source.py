@@ -340,7 +340,10 @@ def test_finite_source_retrieval(reciprocal_clients, usgs_param):
 
         assert tr_db.stats == tr_server.stats
         np.testing.assert_allclose(
-            tr_db.data, tr_server.data, rtol=1e-7, atol=tr_db.data.ptp() * 1e-7
+            tr_db.data,
+            tr_server.data,
+            rtol=1e-7,
+            atol=np.ptp(tr_db.data) * 1e-7,
         )
 
     # Testing network and station code parameters.
@@ -432,7 +435,7 @@ def test_finite_source_retrieval(reciprocal_clients, usgs_param):
 
         assert tr_db.stats == tr_server.stats
         np.testing.assert_allclose(
-            tr_db.data, tr_server.data, atol=1e-6 * tr_db.data.ptp()
+            tr_db.data, tr_server.data, atol=1e-6 * np.ptp(tr_db.data)
         )
 
 

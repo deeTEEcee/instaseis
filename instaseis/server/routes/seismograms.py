@@ -211,11 +211,11 @@ def _parse_validate_and_resample_stf(request, db_info):
     )
 
     # There is potentially some numerical noise on the first sample.
-    assert data[0] < 1e-10 * np.abs(data.ptp())
+    assert data[0] < 1e-10 * np.abs(np.ptp(data))
     data[0] = 0.0
 
     # Normalize the integral to one.
-    data /= np.trapz(np.abs(data), dx=db_info.dt)
+    data /= np.trapezoid(np.abs(data), dx=db_info.dt)
     j["data"] = data
 
     return j

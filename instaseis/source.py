@@ -283,7 +283,7 @@ class SourceTimeFunction(object):
         """
         self.sliprate = np.array(sliprate)
         if normalize:
-            self.sliprate /= np.trapz(sliprate, dx=dt)
+            self.sliprate /= np.trapezoid(sliprate, dx=dt)
         self.dt = dt
         self.time_shift = time_shift
 
@@ -329,7 +329,7 @@ class SourceTimeFunction(object):
         """
         normalize the sliprate using trapezoidal rule
         """
-        self.sliprate /= np.trapz(self.sliprate, dx=self.dt)
+        self.sliprate /= np.trapezoid(self.sliprate, dx=self.dt)
 
     def lp_sliprate(self, freq, corners=4, zerophase=False):
         self.sliprate = lowpass(
@@ -1168,7 +1168,7 @@ class FiniteSource(object):
                         line = line + f.readline()
                     stf = np.array(line.split(), dtype=float)
                     if normalize:
-                        stf /= np.trapz(stf, dx=dt)
+                        stf /= np.trapezoid(stf, dx=dt)
 
                     m0 = area * DEFAULT_MU * slip1
 
@@ -1193,7 +1193,7 @@ class FiniteSource(object):
                         line = line + f.readline()
                     stf = np.array(line.split(), dtype=float)
                     if normalize:
-                        stf /= np.trapz(stf, dx=dt)
+                        stf /= np.trapezoid(stf, dx=dt)
 
                     m0 = area * DEFAULT_MU * slip2
 

@@ -558,7 +558,7 @@ class Window(QtGui.QMainWindow):
             tr = st.select(component=components_map[components_choice][ic])[0]
             times = tr.times()
             plot_widget.plot(times, tr.data, pen="k")
-            plot_widget.ptp = tr.data.ptp()
+            plot_widget.ptp = np.ptp(tr.data)
             if st_cmt is not None:
                 tr = st_cmt.select(
                     component=components_map[components_choice][ic]
