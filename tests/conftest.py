@@ -332,15 +332,21 @@ except ImportError:
 
 def is_master(config):
     """
-    Returns True/False if the current node is the master node.
+    Returns True/False if the current node is the controller node.
 
     Only applies to if run with pytest-xdist.
     """
-    # This attribute is only set on slaves.
-    if hasattr(config, "slaveinput"):  # pragma: no cover
-        return False
-    else:
-        return True
+    # For modern pytest-xdist, use the new helper functions
+    try:
+        return xdist.is_xdist_controller(config)
+    except AttributeError:
+        # Fallback for older versions: check for workerinput or slaveinput
+        if hasattr(config, "workerinput"):  # pragma: no cover
+            return False
+        elif hasattr(config, "slaveinput"):  # pragma: no cover
+            return False
+        else:
+            return True
 
 
 def pytest_configure(config):
@@ -348,11 +354,17 @@ def pytest_configure(config):
         config.dbs = repack_databases()
     else:  # pragma: no cover
         while True:
-            if "dbs" not in config.slaveinput:
+            # Try the modern API first
+            worker_input = getattr(config, "workerinput", None)
+            if worker_input is None:
+                # Fallback to old API
+                worker_input = getattr(config, "slaveinput", None)
+
+            if worker_input is None or "dbs" not in worker_input:
                 time.sleep(0.01)
                 continue
             break
-        config.dbs = pickle.loads(config.slaveinput["dbs"])
+        config.dbs = pickle.loads(worker_input["dbs"])
 
     # This is a bit of silly hack. pytest >= 5.0 removed the global
     # pytest.config variable.
@@ -371,9 +383,16 @@ def pytest_unconfigure(config):
 
 def pytest_configure_node(node):  # pragma: no cover
     """
-    This is only called on the master - we use it to send the information to
-    all the slaves.
+    This is only called on the controller - we use it to send the information to
+    all the workers.
 
     Only applies to if run with pytest-xdist.
     """
-    node.slaveinput["dbs"] = pickle.dumps(node.config.dbs)
+    # Try the modern API first
+    worker_input = getattr(node, "workerinput", None)
+    if worker_input is None:
+        # Fallback to old API
+        worker_input = getattr(node, "slaveinput", None)
+
+    if worker_input is not None:
+        worker_input["dbs"] = pickle.dumps(node.config.dbs)
