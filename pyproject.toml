@@ -36,7 +36,10 @@ dependencies = [
     "numba"
 ]
 [project.optional-dependencies]
-gui = ["PySide6"]
+gui = [
+    "PySide6",
+    "pyqtgraph"
+]
 tests = [
   "pytest >= 8.0",
   "pytest-xdist >= 3.7.0",

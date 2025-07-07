@@ -90,9 +90,9 @@ backend from within Instaseis.
 
     .. raw:: html
 
-        <div class="container">
+        <div>
 
-            <div class="container" style="padding:10px">
+            <div style="padding:10px">
             This section shows two videos about Instaseis. One is a webinar
             hosted by CIG giving an introduction to AxiSEM and Instaseis. The
             second one is a quick demo of Instaseis' GUI.
@@ -106,7 +106,7 @@ backend from within Instaseis.
             <!-- Tab panes -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="webinar">
-                    <div class="container" style="padding:10px">
+                    <div style="padding:10px">
                         This video is a one hour long webinar hosted by CIG
                         containing an introduction to AxiSEM and Instaseis.
                         It explains the basic concepts behind both and
@@ -127,7 +127,7 @@ backend from within Instaseis.
                 </div>
                 <div role="tabpanel" class="tab-pane" id="gui_teaser">
 
-                    <div class="container" style="padding:10px">
+                    <div style="padding:10px">
                         Get a first impression of the things Instaseis can do by taking a short
                         video tour of our graphical user interface (:ref:`gui-label`). Make sure
                         to watch it in HD!
@@ -182,15 +182,23 @@ Installation
 .. admonition:: Installation using conda-forge
 
     By far the easiest way to install Instaseis is to `download
-    Anaconda/Miniconda <https://www.continuum.io/downloads>`_, install it and
+    miniforge <github.com/conda-forge/miniforge>`_, install it and
     then run
 
     .. code-block:: bash
 
-        $ conda install -c conda-forge instaseis
+        $ mamba install -c conda-forge instaseis
 
     This will download and install Instaseis including all its dependencies.
     For other options, please keep on reading.
+
+    Alternatively, a simple
+
+    .. code-block:: bash
+
+        $ pip install instaseis
+
+    should also work on many platforms.
 
 
 Requirements
@@ -198,109 +206,22 @@ Requirements
 
 Instaseis is implemented as a Python library and has a number of dependencies
 listed here. It might well work with other versions but only the versions listed
-here are continuously tested and supported. Instaseis currently runs on Linux
-and Mac OS X. Adding support for Windows is mainly a question of compiling the
-shared Fortran librarys - pull requests are welcome.
+here are continuously tested and supported. It should run on all platforms
+supported by its dependencies.
 
-* ``gfortran >= 4.7``
-* ``Python >= 3.7``
-* ``ObsPy >= 1.2.1``
-* ``h5py``
-* ``requests``
-* ``tornado``
-* ``jsonschema >= 2.4``
-* ``geographiclib``
-
-To run the tests, please also install:
-
-* ``flake8``
-* ``pytest``
-* ``pytest-xdist``
-* ``responses``
-
-The optional graphical user interface furthermore requires
-
-* ``PySide6``
-* ``pyqtgraph`` (Must at least be version 0.11 - at the time of writing this means installing the dev version with ``pip install https://github.com/pyqtgraph/pyqtgraph/archive/develop.zip``)
-* ``matplotlib``
-* ``basemap``
-* ``pillow``
-
-Fortran Compiler
-~~~~~~~~~~~~~~~~
-
-If you don't have ``gfortran``, please install it (on Linux) with
+To run the tests, please install with
 
 .. code-block:: bash
 
-    $ sudo apt-get install gfortran
+    $ pip install instaseis[tests]
 
-or the equivalent of your distribution. On OSX we recommend to install
-`Homebrew <http://brew.sh/>`_ and then use it to install ``gfortran``:
 
-.. code-block:: bash
-
-    $ brew install gcc
-
-Python and Dependencies
-~~~~~~~~~~~~~~~~~~~~~~~
-
-If you know what you are doing, just make sure the aforementioned
-dependencies are installed. Otherwise do yourself a favor and download the
-`Anaconda <https://store.continuum.io/cshop/anaconda/>`_ Python distribution.
-It is a free scientific Python distribution bundling almost all necessary
-modules with a convenient installer (does not require root access!).
-Once installed assert that ``pip`` and ``conda`` point to the Anaconda
-installation folder (you may need to open a new terminal after installing
-Anaconda).
+The optional dependencies of the graphical user interface (GUI) can be
+installed with
 
 .. code-block:: bash
 
-    $ conda install -c conda-forge obspy h5py requests tornado flake8 pytest mock basemap pyqt pip jsonschema responses pyqtgraph pytest-xdist
-
-A possible complication arises **if you are running on a server without a
-display**. In that case please edit (on Linux)
-``~/.config/matplotlib/matplotlibrc`` (create if it does not exist) and make
-sure the following line is part of it:
-
-.. code-block:: bash
-
-    backend: agg
-
-
-A fairly recent development is that ``conda``, on some systems, ships
-``libgfortran3`` versions incompatible with the system libraries. If you see
-errors like::
-
-    ImportError:
-    /home/travis/miniconda/lib/python2.7/site-packages/scipy/special/../../../../libgfortran.so.3:
-    version `GFORTRAN_1.4' not found
-
-please try the following:
-
-.. code-block:: bash
-
-    $ conda remove libgfortran --force
-
-and if that results in some other issues (try it first!), also execute:
-
-.. code-block:: bash
-
-    $ conda install libgcc --force
-
-
-Installing Instaseis
-^^^^^^^^^^^^^^^^^^^^
-
-User Installation
-~~~~~~~~~~~~~~~~~
-
-After the prerequisites are fulfilled, installation of the latest stable
-Instaseis version is as easy as:
-
-.. code-block:: bash
-
-    $ pip install instaseis
+    $ pip install instaseis[gui]
 
 Developer Installation
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -323,14 +244,15 @@ already have them, install with
 
 .. code-block:: bash
 
-    $ conda install click netcdf4
+    $ mamba install click netcdf4
 
 
-To assert that your installation is working properly, execute
+To assert that your installation is working properly, execute (in the instaseis
+directory):
 
 .. code-block:: bash
 
-    $ python -m instaseis.tests
+    $ py.test tests
 
 and make sure all tests pass. Otherwise please contact the developers. To
 speed up the tests they can also be run in parallel with (``n`` is the
@@ -339,7 +261,7 @@ number of cores):
 .. code-block:: bash
 
     $ cd /path/to/instaseis
-    $ py.test -n 4
+    $ py.test -n 4 tests
 
 
 Build the Documentation
