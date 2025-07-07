@@ -330,36 +330,22 @@ except ImportError:
     )
 
 
-def is_master(config):
+def is_controller(config):
     """
     Returns True/False if the current node is the controller node.
 
     Only applies to if run with pytest-xdist.
     """
-    # For modern pytest-xdist, use the new helper functions
-    try:
-        return xdist.is_xdist_controller(config)
-    except AttributeError:
-        # Fallback for older versions: check for workerinput or slaveinput
-        if hasattr(config, "workerinput"):  # pragma: no cover
-            return False
-        elif hasattr(config, "slaveinput"):  # pragma: no cover
-            return False
-        else:
-            return True
+    # Check if this is a worker node by looking for workerinput
+    return not hasattr(config, "workerinput")
 
 
 def pytest_configure(config):
-    if is_master(config):
+    if is_controller(config):
         config.dbs = repack_databases()
     else:  # pragma: no cover
         while True:
-            # Try the modern API first
             worker_input = getattr(config, "workerinput", None)
-            if worker_input is None:
-                # Fallback to old API
-                worker_input = getattr(config, "slaveinput", None)
-
             if worker_input is None or "dbs" not in worker_input:
                 time.sleep(0.01)
                 continue
@@ -376,7 +362,7 @@ def pytest_configure(config):
 
 def pytest_unconfigure(config):
     print("Deleting all test databases ...")
-    if is_master(config) and config.dbs["root_folder"]:
+    if is_controller(config) and config.dbs["root_folder"]:
         if os.path.exists(config.dbs["root_folder"]):
             shutil.rmtree(config.dbs["root_folder"])
 
@@ -388,11 +374,6 @@ def pytest_configure_node(node):  # pragma: no cover
 
     Only applies to if run with pytest-xdist.
     """
-    # Try the modern API first
     worker_input = getattr(node, "workerinput", None)
-    if worker_input is None:
-        # Fallback to old API
-        worker_input = getattr(node, "slaveinput", None)
-
     if worker_input is not None:
         worker_input["dbs"] = pickle.dumps(node.config.dbs)
