@@ -443,14 +443,15 @@ def test_cmt_finite_source():
     """
     finitesource = FiniteSource.from_srf_file(SRF_FILE, True)
     finitesource.compute_centroid()
-    expected = np.array([
-        -3.91886976e+04,
-        3.90905071e+04,
-        9.81905182e+01,
-        1.94225428e+04,
-       -5.26750399e+03,
-       3.19598660e+20
-       ]
+    expected = np.array(
+        [
+            -3.91886976e04,
+            3.90905071e04,
+            9.81905182e01,
+            1.94225428e04,
+            -5.26750399e03,
+            3.19598660e20,
+        ]
     )
     actual = finitesource.CMT.tensor_voigt
 
@@ -469,23 +470,23 @@ def test_fault_vectors_lmn():
     Tests computation of fault vectors l, m and n
     """
     strike, dip, rake = 35.0, 70.0, 17.0
-    l, m, n = fault_vectors_lmn(strike, dip, rake)
+    _l, m, n = fault_vectors_lmn(strike, dip, rake)
 
     # vectors should be perpendicular
     np.testing.assert_allclose(
-        np.array([np.dot(l, n)]), np.array([0.0]), atol=1e-15
+        np.array([np.dot(_l, n)]), np.array([0.0]), atol=1e-15
     )
     np.testing.assert_allclose(
-        np.array([np.dot(l, m)]), np.array([0.0]), atol=1e-15
+        np.array([np.dot(_l, m)]), np.array([0.0]), atol=1e-15
     )
     np.testing.assert_allclose(
         np.array([np.dot(m, n)]), np.array([0.0]), atol=1e-15
     )
 
-    np.testing.assert_allclose(np.cross(n, l), m, atol=1e-15)
+    np.testing.assert_allclose(np.cross(n, _l), m, atol=1e-15)
 
     # vectors should be normalized
-    np.testing.assert_allclose(np.array([1.0]), (l**2).sum())
+    np.testing.assert_allclose(np.array([1.0]), (_l**2).sum())
     np.testing.assert_allclose(np.array([1.0]), (m**2).sum())
     np.testing.assert_allclose(np.array([1.0]), (n**2).sum())
 
@@ -497,8 +498,8 @@ def test_strike_dip_rake_from_ln():
     for strike, dip, rake in zip(
         (42.0, 180.0, -140.0), (22.0, 0.0, 90.0), (17.0, 32.0, 120.0)
     ):
-        l, m, n = fault_vectors_lmn(strike, dip, rake)
-        s, d, r = strike_dip_rake_from_ln(l, n)
+        _l, m, n = fault_vectors_lmn(strike, dip, rake)
+        s, d, r = strike_dip_rake_from_ln(_l, n)
 
         np.testing.assert_allclose(np.array([strike]), np.array([s]))
         np.testing.assert_allclose(np.array([dip]), np.array([d]))
