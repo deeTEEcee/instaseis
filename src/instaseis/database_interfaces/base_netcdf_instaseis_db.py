@@ -497,12 +497,20 @@ class BaseNetCDFInstaseisDB(BaseInstaseisDB, metaclass=ABCMeta):
         else:
             components = "4 elemental moment tensors"
 
+        # Relpath does not always work on Windows.
+        try:
+            directory = os.path.relpath(self.db_path)
+        except ValueError:
+            directory = self.db_path
+
         return dict(
             is_reciprocal=self._is_reciprocal,
             components=components,
-            source_depth=float(self.parsed_mesh.source_depth)
-            if self._is_reciprocal is False
-            else None,
+            source_depth=(
+                float(self.parsed_mesh.source_depth)
+                if self._is_reciprocal is False
+                else None
+            ),
             velocity_model=self.parsed_mesh.background_model,
             external_model_name=self.parsed_mesh.external_model_name,
             attenuation=self.parsed_mesh.attenuation,
@@ -526,7 +534,7 @@ class BaseNetCDFInstaseisDB(BaseInstaseisDB, metaclass=ABCMeta):
             min_d=float(self.parsed_mesh.kwf_colatmin),
             max_d=float(self.parsed_mesh.kwf_colatmax),
             time_scheme=self.parsed_mesh.time_scheme,
-            directory=os.path.relpath(self.db_path),
+            directory=directory,
             filesize=filesize,
             compiler=self.parsed_mesh.axisem_compiler,
             user=self.parsed_mesh.axisem_user,
