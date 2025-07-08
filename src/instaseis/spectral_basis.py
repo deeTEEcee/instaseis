@@ -4,8 +4,8 @@
 AxiSEM's kernel module.
 
 :copyright:
-    Lion Krischer (lion.krischer@gmail.com), 2025
-    Martin van Driel (Martin@vanDriel.de), 2020
+    Martin van Driel (Martin@vanDriel.de), 2020-2025
+    Lion Krischer (lion.krischer@gmail.com), 2020-2025
 :license:
     GNU Lesser General Public License, Version 3 [non-commercial/academic use]
     (http://www.gnu.org/copyleft/lgpl.html)

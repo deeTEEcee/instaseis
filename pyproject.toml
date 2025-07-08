@@ -45,7 +45,7 @@ tests = [
   "pytest-xdist >= 3.7.0",
   "click",
   "netCDF4",
-  "flake8 >= 3",
+  "ruff",
   "responses",
 ]
 

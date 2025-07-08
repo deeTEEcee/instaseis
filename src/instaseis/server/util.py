@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """:copyright:
-    Lion Krischer (lion.krischer@gmail.com), 2020
+    Lion Krischer (lion.krischer@gmail.com), 2020-2025
 :license:
     GNU Lesser General Public License, Version 3 [non-commercial/academic use]
     (http://www.gnu.org/copyleft/lgpl.html).
