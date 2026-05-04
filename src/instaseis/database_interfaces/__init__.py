@@ -62,23 +62,17 @@ def find_and_open_files(path, *args, **kwargs):
     # Catch the merged file first because its easy.
     if len(found_files) == 1 and found_files[0].name == "merged_output.nc4":
         # Now we have to open the file and find the number of dimensions.
+        f = None
+        s3_fobj = None
         try:
             f, s3_fobj = _open_h5py(found_files[0])
             ds = f["/MergedSnapshots"]
             dims = ds.shape[1]
         finally:
-            # File closing seems to act up in the tests for maybe locking
-            # related reasons? If this proves an issue in production we'll
-            # have to look into alternative solutions.
-            try:
+            if f is not None:
                 f.close()
-            except Exception:  # pragma: no cover
-                pass
             if s3_fobj is not None:
-                try:
-                    s3_fobj.close()
-                except Exception:  # pragma: no cover
-                    pass
+                s3_fobj.close()
 
         if dims in (2, 3, 5):
             return ReciprocalMergedInstaseisDB(
