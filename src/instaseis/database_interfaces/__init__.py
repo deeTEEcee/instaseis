@@ -18,7 +18,6 @@ from .mesh import _open_h5py
 from .reciprocal_instaseis_db import ReciprocalInstaseisDB
 from .reciprocal_merged_instaseis_db import ReciprocalMergedInstaseisDB
 
-
 _TARGET_FILENAMES = frozenset([
     "ordered_output.nc4",
     "axisem_output.nc4",
@@ -37,10 +36,7 @@ def find_and_open_files(path, *args, **kwargs):
     found_files = []
 
     def _walk(current, depth):
-        try:
-            children = list(current.iterdir())
-        except Exception:
-            return
+        children = list(current.iterdir())
         dirs = [c for c in children if c.is_dir()]
         by_name = {c.name: c for c in children if c.is_file()}
         for name in sorted(by_name, reverse=True):
