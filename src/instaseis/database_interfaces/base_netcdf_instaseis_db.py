@@ -13,10 +13,11 @@ AxiSEM.
 
 from abc import ABCMeta, abstractmethod
 import collections
+import os
 
+from cloudpathlib import AnyPath
 import numpy as np
 from obspy.signal.util import next_pow_2
-import os
 
 from .base_instaseis_db import BaseInstaseisDB
 from .. import finite_elem_mapping
@@ -474,7 +475,7 @@ class BaseNetCDFInstaseisDB(BaseInstaseisDB, metaclass=ABCMeta):
         filesize = 0
         for m in self.meshes:
             if m:
-                filesize += os.path.getsize(m.filename)
+                filesize += AnyPath(m.filename).stat().st_size
 
         if self._is_reciprocal:
             if hasattr(self.meshes, "merged"):

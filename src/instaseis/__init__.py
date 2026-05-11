@@ -3,7 +3,7 @@ from importlib.metadata import version as _get_version
 import os
 import re
 
-__version__ = _get_version("instaseis")
+__version__ = _get_version("instaseis-es")
 
 # Optionally disable the numba cache for problematic systems.
 _use_numba_cache = os.environ.get(

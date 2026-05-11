@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 # Dyanmic
 dynamic = ["version"]
-name = "instaseis"
+name = "instaseis-es"
 authors = [
     { name = "Lion Krischer", email = "lion.krischer@gmail.com" },
     { name = "Martin van Driel" },
@@ -33,7 +33,9 @@ dependencies = [
     "requests",
     "geographiclib",
     "jsonschema >= 2.4.0",
-    "numba"
+    "numba",
+    "cloudpathlib[s3]",
+    "s3fs"
 ]
 [project.optional-dependencies]
 gui = [

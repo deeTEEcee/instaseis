@@ -9,6 +9,7 @@ doc/_build
 build/
 instaseis/RELEASE-VERSION
 dist/
+*.egg-info
 advanced_server_configuration_example/event_db.json
 advanced_server_configuration_example/station_list.txt
 **/__pycache__

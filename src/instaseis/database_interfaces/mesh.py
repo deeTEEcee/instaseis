@@ -29,6 +29,21 @@ from obspy import UTCDateTime
 from scipy.spatial import cKDTree
 
 
+def _open_h5py(path, mode="r"):
+    """Open an HDF5 file, returning (h5py.File, underlying_fobj).
+
+    For S3 URIs, uses s3fs as the underlying file object since most h5py
+    builds lack the ros3 VFD. Keep fobj alive for as long as the h5py.File
+    is open. For local paths, fobj is None.
+    """
+    s = str(path)
+    if s.startswith("s3://"):
+        import s3fs
+        fobj = s3fs.S3FileSystem().open(s, "rb")
+        return h5py.File(fobj, mode), fobj
+    return h5py.File(s, mode), None
+
+
 class Buffer(object):
     """A simple memory-limited buffer with a dictionary-like interface.
     Implemented as a kind of priority queue where priority is highest for
@@ -126,8 +141,8 @@ class Mesh(object):
         displ_buffer_size_in_mb=0,
         read_on_demand=True,
     ):
-        self.f = h5py.File(filename, "r")
-        self.filename = filename
+        self.f, self._s3_fobj = _open_h5py(filename)
+        self.filename = str(filename)
         self.read_on_demand = read_on_demand
         self._parse(full_parse=full_parse)
         self._find_time_axis()
